@@ -1,6 +1,6 @@
 ---
 name: Lasse Moench
-images: ["jane-smith.jpg"]
+images: ["lasse-moench.jpg"]
 ---
 
 This could be a beautiful description about myself.

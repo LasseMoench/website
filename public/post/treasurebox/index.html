@@ -39,7 +39,7 @@
 <meta itemprop="description" content="Building a reverse geocache treasure box that is locked until taken to the correct location.">
 <meta itemprop="datePublished" content="2019-08-11T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2019-08-11T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1458">
+<meta itemprop="wordCount" content="1479">
 <meta itemprop="image" content="https://lassemoench.de/treasure-box-outside.jpg">
 <meta itemprop="image" content="https://lassemoench.de/treasure_box_schematic.jpg">
 
@@ -84,7 +84,7 @@
                     <div class="col-lg-8">
                         <div class="meta text-muted mb-3">
                             <p class="created text-muted text-uppercase font-weight-bold mb-1">August 11, 2019</p>
-                            <span class="mr-2"><i class="fas fa-book-open mr-2"></i>1458 words</span>
+                            <span class="mr-2"><i class="fas fa-book-open mr-2"></i>1479 words</span>
                             <span><i class="fas fa-clock mr-2"></i>7 mins read</span>
                         </div>
 
@@ -93,8 +93,8 @@
                         <ul class="authors list-inline"><li class="list-inline-item mr-3">
                     <div class="media author"><a href="/authors/lasse-moench/" class="mr-3">
                                     <picture>
-                                        <source srcset="/authors/lasse-moench/jane-smith_hu62bd326fb0c7d5b63111f2a147a15814_14429_64x0_resize_q75_box.jpg 1x, /authors/lasse-moench/jane-smith_hu62bd326fb0c7d5b63111f2a147a15814_14429_128x0_resize_q100_box.jpg 2x, /authors/lasse-moench/jane-smith_hu62bd326fb0c7d5b63111f2a147a15814_14429_192x0_resize_q100_box.jpg 3x">
-                                        <img src="/authors/lasse-moench/jane-smith_hu62bd326fb0c7d5b63111f2a147a15814_14429_64x0_resize_q75_box.jpg" class="rounded-circle" alt="Lasse Moench">
+                                        <source srcset="/authors/lasse-moench/lasse-moench_hu2fee9ff678090a7db43a78b8a0e138a7_23533_64x0_resize_q75_box.jpg 1x, /authors/lasse-moench/lasse-moench_hu2fee9ff678090a7db43a78b8a0e138a7_23533_128x0_resize_q100_box.jpg 2x, /authors/lasse-moench/lasse-moench_hu2fee9ff678090a7db43a78b8a0e138a7_23533_192x0_resize_q100_box.jpg 3x">
+                                        <img src="/authors/lasse-moench/lasse-moench_hu2fee9ff678090a7db43a78b8a0e138a7_23533_64x0_resize_q75_box.jpg" class="rounded-circle" alt="Lasse Moench">
                                     </picture>
                                 </a><div class="media-body">
                             <h5 class="name my-0"><a href="/authors/lasse-moench/" class="small">Lasse Moench</a>
@@ -126,7 +126,7 @@
 <p><img src="/images/treasure_box_schematic.jpg" alt="Treasure Box Schematic" title="Treasure Box Schematic"></p>
 <p>And here&rsquo;s how the inside of my lid looked afterwards:</p>
 <p><img src="/images/lid_inside.jpg" alt="Lid inside" title="Treasure Box Lid"></p>
-<p>After I wired everything up, it was time for coding. First, we import some libraries that we are going to use and initialize several variables. We also define a custom version of delay that will query the GPS module for new data for a fixed amount of time:</p>
+<p>After I wired everything up, it was time for coding. If you want to follow this article, please <a href="https://github.com/LasseMoench/treasurebox">clone the git repository</a> as this article does not include the complete code. First, we import some libraries that we are going to use and initialize several variables. We also define a custom version of delay that will query the GPS module for new data for a fixed amount of time:</p>
 <pre><code class="language-c">#include &lt;ESP8266WiFi.h&gt;
 #include &lt;EEPROM.h&gt;
 #include &lt;LiquidCrystal_I2C.h&gt;
