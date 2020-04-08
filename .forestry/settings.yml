@@ -9,7 +9,7 @@ sections:
   label: Static Images
   create: all
   match: "**/*"
-  new_doc_ext: ".jpg"
+  new_doc_ext: jpg
 - type: directory
   path: content
   label: Pages
@@ -30,8 +30,8 @@ sections:
   label: Post
   create: all
   match: "**/*"
-upload_dir: static/uploads
-public_path: "/uploads"
+upload_dir: content/images
+public_path: content/images
 front_matter_path: ''
 use_front_matter_path: false
 file_template: ":filename:"
