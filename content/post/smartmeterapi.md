@@ -1,9 +1,22 @@
-Title: Making a Digital Power Meter - Part 2: API
-Date: 2019-02-02 15:00
-Category: Smart Meter
-Tags: ESP8266
++++
+authors = [
+    "Lasse Moench"
+]
+title = "Making a Digital Power Meter - Part 2: API"
+date = "2019-02-02"
+tags = [
+    "esp8266"
+]
+categories = [
+    "arduino"
+]
+series = ["Power Meter"]
+images = [
+    "markdown-syntax.jpg"
+]
++++
 
-In [Part 1]({filename}/smartmeter.md), I explained the general idea for my smart meter and how I assembled the hardware as well as the microcontroller code. In this part, I will explain the little API that I built to record the ticks and to display it using either a website or another microcontroller with a small OLED display.
+In [Part 1]({{< ref "/post/smartmeter.md" >}}), I explained the general idea for my smart meter and how I assembled the hardware as well as the microcontroller code. In this part, I will explain the little API that I built to record the ticks and to display it using either a website or another microcontroller with a small OLED display.
 
 I decided to build a [RESTful API](https://de.wikipedia.org/wiki/Representational_State_Transfer) using the [Flask microframework](http://flask.pocoo.org/) with [Connexion](http://flask.pocoo.org/). I chose Flask mainly because I have already worked with it at university in the past, but don't worry, it is very easy to get started with it. Have a look at the [Connexion helloworld example](https://github.com/zalando/connexion/tree/master/examples/openapi3/helloworld), you can start from there and adapt it. You can also use any other API framework, and as long as it's Python, you should be able to reuse most of my code if you want to.
 
