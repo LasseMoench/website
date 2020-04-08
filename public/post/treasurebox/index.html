@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<title>
+  
+     Building a Smart Treasure Box | 
+    Lasse&#39;s Wonder Emporium
+  
+</title><meta name="description" content="Building a reverse geocache treasure box that is locked until taken to the correct location."><meta name="author" content="Lasse Moench">
+
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css">
+    
+
+
+
+    
+        
+            <link rel="stylesheet" href="/dist/main.37ab3f61b95417873748.min.css">
+        
+    
+
+
+
+
+<link rel="canonical" href="https://lassemoench.de/post/treasurebox/"><meta property="og:title" content="Building a Smart Treasure Box" />
+<meta property="og:description" content="Building a reverse geocache treasure box that is locked until taken to the correct location." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lassemoench.de/post/treasurebox/" />
+<meta property="og:image" content="https://lassemoench.de/treasure-box-outside.jpg" />
+<meta property="og:image" content="https://lassemoench.de/treasure_box_schematic.jpg" />
+<meta property="article:published_time" content="2019-08-11T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-08-11T00:00:00+00:00" />
+<meta itemprop="name" content="Building a Smart Treasure Box">
+<meta itemprop="description" content="Building a reverse geocache treasure box that is locked until taken to the correct location.">
+<meta itemprop="datePublished" content="2019-08-11T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-08-11T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1458">
+<meta itemprop="image" content="https://lassemoench.de/treasure-box-outside.jpg">
+<meta itemprop="image" content="https://lassemoench.de/treasure_box_schematic.jpg">
+
+
+
+<meta itemprop="keywords" content="esp8266," /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lassemoench.de/treasure-box-outside.jpg"/>
+
+<meta name="twitter:title" content="Building a Smart Treasure Box"/>
+<meta name="twitter:description" content="Building a reverse geocache treasure box that is locked until taken to the correct location."/>
+
+</head>
+<body>
+    
+<nav class="navbar navbar-expand-md navbar-light bg-light fixed-top shadow-sm" id="navbar-main-menu">
+    <div class="container">
+        <a class="navbar-brand font-weight-bold" href="https://lassemoench.de">Lasse&#39;s Wonder Emporium</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="main-menu">
+            <ul class="navbar-nav ml-auto">
+                
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                
+                    <li class="nav-item"><a class="nav-link" href="/about-me/">About Me</a></li>
+                
+            
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+    
+<main class="content-page container pt-7 pb-5">
+    
+    <div class="row">
+        <div class="col">
+            <article>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="meta text-muted mb-3">
+                            <p class="created text-muted text-uppercase font-weight-bold mb-1">August 11, 2019</p>
+                            <span class="mr-2"><i class="fas fa-book-open mr-2"></i>1458 words</span>
+                            <span><i class="fas fa-clock mr-2"></i>7 mins read</span>
+                        </div>
+
+                        <h1>Building a Smart Treasure Box</h1>
+
+                        <ul class="authors list-inline"><li class="list-inline-item mr-3">
+                    <div class="media author"><a href="/authors/lasse-moench/" class="mr-3">
+                                    <picture>
+                                        <source srcset="/authors/lasse-moench/jane-smith_hu62bd326fb0c7d5b63111f2a147a15814_14429_64x0_resize_q75_box.jpg 1x, /authors/lasse-moench/jane-smith_hu62bd326fb0c7d5b63111f2a147a15814_14429_128x0_resize_q100_box.jpg 2x, /authors/lasse-moench/jane-smith_hu62bd326fb0c7d5b63111f2a147a15814_14429_192x0_resize_q100_box.jpg 3x">
+                                        <img src="/authors/lasse-moench/jane-smith_hu62bd326fb0c7d5b63111f2a147a15814_14429_64x0_resize_q75_box.jpg" class="rounded-circle" alt="Lasse Moench">
+                                    </picture>
+                                </a><div class="media-body">
+                            <h5 class="name my-0"><a href="/authors/lasse-moench/" class="small">Lasse Moench</a>
+                            </h5></div>
+                    </div>
+                </li></ul>
+                    </div>
+                </div><div class="row justify-content-center mb-3">
+                                <div class="col-lg-10">
+                                    <img data-src="/images/treasure-box-outside_hu92fb6393cc49047648f3ad43f92d4008_152192_900x500_fit_q75_box.jpg" class="img-fluid rounded mx-auto d-block" alt="Building a Smart Treasure Box">
+                                </div>
+                            </div><div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="content">
+                            <p>A couple of weeks ago, I wanted to create a fun gift for a friend of mine. While browsing reddit for inspiration, I stumbled upon <a href="http://arduiniana.org/projects/the-reverse-geo-cache-puzzle/">Mikal Hart&rsquo;s reverse geocache puzzle</a>. I ordered all the parts I needed, and waited a couple of days until they had all arrived.</p>
+<p>The basic idea is to create a box that is locked from the inside, and only opens when brought to the right location. For this purpose we need a few things:</p>
+<ol>
+<li>A microcontroller (I used an ESP8266, but since we don&rsquo;t need the wifi capabilities, a more powersaving alternative like an arduino nano or a stm32 would have been better)</li>
+<li>A GPS module to determine the boxes position</li>
+<li>An LCD screen to show the distance to the target and the amount of remaining tries</li>
+<li>Some locking mechanism</li>
+<li>A power source (I used a lipo cell with a tp4056 module that I had laying around)</li>
+<li>A power switch that can be triggered by the microcontroller as well as a button (can be self built)</li>
+</ol>
+<p>First, I thought about what I wanted the box to do. I wanted it to be some kind of riddle or adventure, so the box needed to be as self explaining as possible. When someone presses the button on top of the box, the display lights up. It shows some message while it is waiting for a GPS fix (e.g. &ldquo;Reading Map&hellip;&quot;). If it doesn&rsquo;t find a fix, it will show a message to take the box outside. If it does get a fix, it will show the distance to the target in meters as well as the amount of tries that remain. The picture below shows the box from the outside after it was done:</p>
+<p><img src="/images/treasure-box-outside.jpg" alt="Treasure Box" title="Treasure Box"></p>
+<p>After all the parts arrived, it was time to put it all together. I had some trouble building a lock mechanism. I tried to use a servo motor at first, which was supposed to move a wooden bar left and right to lock and unlock the box. However, the wooden bar got stuck all the time and when I left enough space that it wouldn&rsquo;t get stuck, it was possible to open the lid enough to peak into the box. So I went back into the city and got a solenoid, which is basically a magnet that pulls a rod. When off, the rod would be pushed forward by a small spring, pushing it into a piece of wood coming from the boxes lid. The solenoid is attached to the side wall of the box, so if it is pushed into the hole in the wood that is attached to the lid, the box is locked. When the box is in the correct location, the microcontroller closes a relay, powering the solenoid. The metal rod is then pulled back out of the hole and the box is unlocked.</p>
+<p>I attached the rest of the electronics to the lid of the box, and connected everything using a wild mixture of perfboard and dupont wires. Here&rsquo;s a badly drawn schematic that I drew:</p>
+<p><img src="/images/treasure_box_schematic.jpg" alt="Treasure Box Schematic" title="Treasure Box Schematic"></p>
+<p>And here&rsquo;s how the inside of my lid looked afterwards:</p>
+<p><img src="/images/lid_inside.jpg" alt="Lid inside" title="Treasure Box Lid"></p>
+<p>After I wired everything up, it was time for coding. First, we import some libraries that we are going to use and initialize several variables. We also define a custom version of delay that will query the GPS module for new data for a fixed amount of time:</p>
+<pre><code class="language-c">#include &lt;ESP8266WiFi.h&gt;
+#include &lt;EEPROM.h&gt;
+#include &lt;LiquidCrystal_I2C.h&gt;
+#include &lt;TinyGPS++.h&gt;
+#include &lt;SoftwareSerial.h&gt;
+
+TinyGPSPlus gps;  // The TinyGPS++ object
+SoftwareSerial ss(D7, D6); // The serial connection to the GPS device
+
+// Construct an LCD object and pass it the 
+// I2C address, width (in characters) and
+// height (in characters). Depending on the
+// Actual device, the IC2 address may change.
+LiquidCrystal_I2C lcd(0x3F, 20, 4);
+int counterAddr = 0;
+int switchPin = D5;
+int relayPin = 3; //RX pin hopefully doesn't go high on boot
+float distance = 9999.9;
+bool fixTimeOut = false;
+
+
+const double TARGET_LAT = 50.789639;
+const double TARGET_LNG = 6.077338;
+
+// This custom version of delay() ensures that the gps object is being &quot;fed&quot;.
+static void smartDelay(unsigned long ms){unsigned long start = millis(); do  {while (ss.available()) gps.encode(ss.read());} while (millis() - start &lt; ms);}
+</code></pre>
+<p>Since our code will shut the microcontroller down when it&rsquo;s done, our whole code will be in the setup() method (and therefore will only be executed once on boot, not repeatedly). We start by initializing the screen and some of our output pins, as well as switching off WiFi to save power. When doing this, I stumbled upon a problem: Some of the ESPs IO pins shortly go HIGH on boot. This is not a problem for some applications, but it would cause our box to unlock shortly everytime the button is pressed if the pin that is connected to the relay behaves like that. I tried a few pins and it worked with pin 3 after I also added a 1k pulldown resistor. We also initialize the software serial connection that we&rsquo;re going to use to communicate with the GPS module:</p>
+<pre><code class="language-c">
+void setup() {
+  //Shutdown WiFi to save power
+  WiFi.mode( WIFI_OFF );
+  WiFi.forceSleepBegin();
+  delay( 1 );
+  
+  digitalWrite(switchPin, LOW);
+  digitalWrite(relayPin, LOW);
+  pinMode(switchPin, OUTPUT);
+  pinMode(relayPin, OUTPUT);
+  // The begin call takes the width and height. This
+  // Should match the number provided to the constructor.
+  lcd.begin(20, 4);
+  lcd.init();
+
+  ss.begin(9600);
+</code></pre>
+<p>Next, we need a way to count the amount of tries that have already been spent. Since the microcontroller will reboot, a simple variable won&rsquo;t do and we need to write it to the ESPs EEPROM. Thanks to the EEPROM library, this is quite simple. If the specified amount of tries has been exceeded, we will show a failure message. Otherwise, we will try to get a GPS fix:</p>
+<pre><code class="language-c">  EEPROM.begin(512);
+  int tries = EEPROM.read(counterAddr);
+
+  //Turn on the backlight of the LCD.
+  lcd.backlight();
+
+  //If tries &gt; 25, show failure message
+  if(tries &gt; 25){
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print(&quot;Tries exceeded.&quot;);
+    lcd.setCursor(0, 1);
+    lcd.print(&quot;Box locked forever.&quot;);
+    lcd.setCursor(0, 3);
+    lcd.print(&quot;Contact a pirate!&quot;);
+  }else{
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print(&quot;Reading map...&quot;);
+    lcd.setCursor(0, 3);
+    lcd.print(&quot;Be patient. &quot;);
+  
+    //Get position
+    smartDelay(200);
+    int ms = millis();
+    while(gps.satellites.value() &lt; 4 &amp;&amp; (millis() - ms) &lt; 120000){
+      smartDelay(200);
+      lcd.setCursor(17,3);
+      lcd.print(gps.satellites.value());
+      lcd.print(&quot;/4&quot;);
+      delay(500);
+      if(millis() - ms &gt; 115000){
+          fixTimeOut = true;
+        }
+      }
+</code></pre>
+<p>After waiting a maximum of 120 seconds for a GPS fix, we check if we got one. If not, we show some error message. If we got a fix, we will calculate the distance between the box and the target. If the distance is smaller than a predefined threshold (I used 100m), we open the box by setting the relay output pin to HIGH. If we are further away, we will show the distance and the amount of tries to the screen for some time and switch everything off after a while. Additionally, we will show the direction in which the adventurer has to walk if the amount of tries is more than 15, since if they haven&rsquo;t found by that time their motivation is probably really low:</p>
+<pre><code class="language-c">    if(distance &lt; 100.0){
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print(&quot;You are one&quot;);
+        lcd.setCursor(0,1);
+        lcd.print(&quot;bodacious babe!&quot;);
+        lcd.setCursor(0,3);        
+        lcd.print(&quot;Box is open.&quot;);
+
+        digitalWrite(relayPin, HIGH);
+        delay(30000);
+        digitalWrite(switchPin, HIGH);
+      } else {
+          String tryString = &quot;/25 tries&quot;;
+
+          lcd.clear();
+          lcd.setCursor(0,0);
+          lcd.print(tries + tryString);
+        
+          lcd.setCursor(0,1);
+          String distString = &quot;Distance: &quot;;
+          String distStringEnd = &quot;m&quot;;
+          lcd.print(distString + distance + distStringEnd);
+
+          if(tries &gt; 14){
+            double courseTo = gps.courseTo(gps.location.lat(), gps.location.lng(), TARGET_LAT, TARGET_LNG);  
+            lcd.setCursor(0,2);
+            lcd.print(&quot;Direction: &quot;);
+            lcd.print(courseTo);
+            lcd.print(gps.cardinal(courseTo));
+          }
+          
+          tries++;            
+          EEPROM.write(counterAddr, tries);
+          EEPROM.commit();
+
+          delay(10000);
+          digitalWrite(switchPin, HIGH);
+        }
+    }
+</code></pre>
+<p>Now we&rsquo;re done. However, there are two problems that remain: If we want to reset the tries, we need to flash a different firmware and write 0 to the EEPROM, and if the battery is empty and the box is locked, we need to disassemble the box. To fix both problems, I added a little usb socket. Applying power to the usb socket provides power to the microcontroller, bypassing the battery and the switch. Therefore, if the microcontroller is still on after we triggered the switch, we know it is being powered through the usb port. We then show some gibberish on the screen so that if anyone else tries to connect something to the usb port, they will unplug it before it opens the box. After a while of waiting and printing error messages, we open the box and reset the counter:</p>
+<pre><code class="language-c">  //Print emergency gibberish to to make people unplug usb before box opens
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print(&quot;WARNING:&quot;);
+  lcd.setCursor(0,1);
+  lcd.print(&quot;Power too high!&quot;);
+  lcd.setCursor(0,2);
+  lcd.print(&quot;Remove USB&quot;);
+  lcd.setCursor(0,3);
+  lcd.print(&quot;connection!&quot;);
+
+  delay(10000);
+
+  lcd.clear();
+  lcd.setCursor(0,3);
+
+  for(int i = 0; i &lt; 80; i++){
+    byte randomValue = random(0, 37);
+    char letter = randomValue + ' ';
+    lcd.print(letter);
+    delay(300);
+  }
+
+  delay(20000);
+
+  EEPROM.write(counterAddr, 0);
+  EEPROM.commit();
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print(&quot;RESET COUNTER&quot;);
+  delay(1000);
+  lcd.noBacklight();
+
+  delay(10000);
+
+  digitalWrite(relayPin, HIGH);
+  delay(20000);
+}
+</code></pre>
+<p>That&rsquo;s it, were done! Time to take our box on a trial adventure!</p>
+
+                        </div><div class="tags my-3"><a class="badge badge-pill badge-light border mr-2" href="/tags/esp8266">
+                                    <i class="fas fa-tag mr-2"></i>esp8266
+                                </a></div><ul class="share nav my-3 justify-content-end">
+        <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://twitter.com/intent/tweet?url=https%3a%2f%2flassemoench.de%2fpost%2ftreasurebox%2f&text=Building%20a%20Smart%20Treasure%20Box">
+              <i class="fa-fw fab fa-twitter"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://www.linkedin.com/shareArticle?url=https%3a%2f%2flassemoench.de%2fpost%2ftreasurebox%2f&title=Building%20a%20Smart%20Treasure%20Box">
+                <i class="fa-fw fab fa-linkedin-in"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://www.facebook.com/sharer.php?u=https%3a%2f%2flassemoench.de%2fpost%2ftreasurebox%2f&t=Building%20a%20Smart%20Treasure%20Box">
+                <i class="fa-fw fab fa-facebook-f"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://reddit.com/submit?url=https%3a%2f%2flassemoench.de%2fpost%2ftreasurebox%2f&title=Building%20a%20Smart%20Treasure%20Box">
+                <i class="fa-fw fab fa-reddit-alien"></i>
+            </a>
+        </li>
+    </nav>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        
+                    </div>
+                </div></article>
+        </div>
+    </div>
+
+    <div class="related-content row mt-5 row-cols-1 row-cols-lg-3"><div class="col mb-3">
+                <div class="card h-100">
+    
+    <a href="/post/smartmeterapi/" class="d-block"><img data-src="/images/markdown-syntax_hu9d0b46ff016e885d1678cd94c2d23ea6_42965_700x350_resize_q75_box.jpg" class="card-img-top mx-auto d-block" alt="Making a Digital Power Meter - Part 2: API"><div class="card-body">
+            <h4 class="card-title">Making a Digital Power Meter - Part 2: API</h4>
+            <p class="card-text text-muted text-uppercase">February 2, 2019</p>
+            <div class="card-text">
+                In Part 1, I explained the general idea for my smart meter and how I assembled the hardware as well as the microcontroller code. In this part, I will explain the little API that I built to record the ticks and to display it using either a website or another microcontroller with a small OLED display.
+I decided to build a RESTful API using the Flask microframework with Connexion. I chose Flask mainly because I have already worked with it at university in the past, but don&amp;rsquo;t worry, it is very easy to get started with it.
+            </div>
+        </div>
+    </a>
+</div>
+
+            </div><div class="col mb-3">
+                <div class="card h-100">
+    
+    <a href="/post/smartmeter/" class="d-block"><img data-src="/images/smartmeter_hu6d39fb5e1dacb2204e090be17b31ee1a_102612_700x350_resize_q75_box.jpg" class="card-img-top mx-auto d-block" alt="Making a Digital Power Meter - Part 1: Meter"><div class="card-body">
+            <h4 class="card-title">Making a Digital Power Meter - Part 1: Meter</h4>
+            <p class="card-text text-muted text-uppercase">January 22, 2019</p>
+            <div class="card-text">
+                I recently read a lot about smart power meters and how they allow detailed analysis of a households power consumption as well as the habits of its inhabitants. Since our power meter is an old analog Ferraris Meter, I decided to build one myself, which would allow me to analyse our energy consumption without giving the info to my energy provider. This makes it even better than a commercial one!
+            </div>
+        </div>
+    </a>
+</div>
+
+            </div></div>
+</main>
+
+
+    <footer class="footer text-center bg-dark py-6">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <ul class="list-inline">
+                    <li class="list-inline-item"><a href="https://lassemoench.de/index.xml" rel="alternate" type="application/rss+xml" class="icons d-block">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a></li><li class="list-inline-item">
+                        <a href="mailto://lasse@lassemoench.de" class="icons d-block">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li><li class="list-inline-item">
+                            <a href="https://github.com/lassemoench" class="icons d-block">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li><li class="list-inline-item">
+                            <a href="https://keybase.io/gasp0de" class="icons d-block">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fab fa-keybase fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                </ul>
+
+                <p class="text-muted">
+                    
+                        Copyright © 2020, Lasse Moench; all rights reserved.
+                    
+                </p>
+
+                <p class="text-muted">
+                Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with <a href="https://github.com/puresyntax71/hugo-theme-chunky-poster" target="_blank">Chunky Poster</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    
+    
+        
+            <script src="/dist/main.d608eadfe5ac0688902e.min.js"></script>
+        
+    
+
+
+
+<script>
+    window.Prism = window.Prism || {};
+    window.Prism.manual = true;
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+
+
+
+    
+</body>
+</html>

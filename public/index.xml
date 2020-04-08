@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Lasse&#39;s Wonder Emporium</title>
+    <link>https://lassemoench.de/</link>
+    <description>Recent content on Lasse&#39;s Wonder Emporium</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>Copyright © 2020, Lasse Moench; all rights reserved.</copyright>
+    <lastBuildDate>Wed, 08 Apr 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://lassemoench.de/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>About Me</title>
+      <link>https://lassemoench.de/about-me/</link>
+      <pubDate>Wed, 08 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://lassemoench.de/about-me/</guid>
+      <description>Welcome to my personal blog, which I set up for the sole purpose of answering all those &amp;ldquo;Awesome idea, how can I build one myself?&amp;quot; questions with a simple link instead of a lengthy description. Just kidding, I mostly get raised eyebrows and a friendly &amp;ldquo;Nerd!&amp;quot; when I brag about my projects. This is mostly a repository for myself so that I don&amp;rsquo;t forget what I was thinking if I have to repair any of these things in the future.</description>
+    </item>
+    
+    <item>
+      <title>Building a Smart Treasure Box</title>
+      <link>https://lassemoench.de/post/treasurebox/</link>
+      <pubDate>Sun, 11 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://lassemoench.de/post/treasurebox/</guid>
+      <description>A couple of weeks ago, I wanted to create a fun gift for a friend of mine. While browsing reddit for inspiration, I stumbled upon Mikal Hart&amp;rsquo;s reverse geocache puzzle. I ordered all the parts I needed, and waited a couple of days until they had all arrived.
+The basic idea is to create a box that is locked from the inside, and only opens when brought to the right location.</description>
+    </item>
+    
+    <item>
+      <title>Making a Digital Power Meter - Part 2: API</title>
+      <link>https://lassemoench.de/post/smartmeterapi/</link>
+      <pubDate>Sat, 02 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://lassemoench.de/post/smartmeterapi/</guid>
+      <description>In Part 1, I explained the general idea for my smart meter and how I assembled the hardware as well as the microcontroller code. In this part, I will explain the little API that I built to record the ticks and to display it using either a website or another microcontroller with a small OLED display.
+I decided to build a RESTful API using the Flask microframework with Connexion. I chose Flask mainly because I have already worked with it at university in the past, but don&amp;rsquo;t worry, it is very easy to get started with it.</description>
+    </item>
+    
+    <item>
+      <title>Making a Digital Power Meter - Part 1: Meter</title>
+      <link>https://lassemoench.de/post/smartmeter/</link>
+      <pubDate>Tue, 22 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://lassemoench.de/post/smartmeter/</guid>
+      <description>I recently read a lot about smart power meters and how they allow detailed analysis of a households power consumption as well as the habits of its inhabitants. Since our power meter is an old analog Ferraris Meter, I decided to build one myself, which would allow me to analyse our energy consumption without giving the info to my energy provider. This makes it even better than a commercial one!</description>
+    </item>
+    
+  </channel>
+</rss>

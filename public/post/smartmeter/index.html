@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<title>
+  
+     Making a Digital Power Meter - Part 1: Meter | 
+    Lasse&#39;s Wonder Emporium
+  
+</title><meta name="description" content="Student, geek, tinkerer."><meta name="author" content="Lasse Moench">
+
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css">
+    
+
+
+
+    
+        
+            <link rel="stylesheet" href="/dist/main.37ab3f61b95417873748.min.css">
+        
+    
+
+
+
+
+<link rel="canonical" href="https://lassemoench.de/post/smartmeter/"><meta property="og:title" content="Making a Digital Power Meter - Part 1: Meter" />
+<meta property="og:description" content="I recently read a lot about smart power meters and how they allow detailed analysis of a households power consumption as well as the habits of its inhabitants. Since our power meter is an old analog Ferraris Meter, I decided to build one myself, which would allow me to analyse our energy consumption without giving the info to my energy provider. This makes it even better than a commercial one!" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lassemoench.de/post/smartmeter/" />
+<meta property="og:image" content="https://lassemoench.de/smartmeter.jpg" />
+<meta property="article:published_time" content="2019-01-22T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-01-22T00:00:00+00:00" />
+
+<meta itemprop="name" content="Making a Digital Power Meter - Part 1: Meter">
+<meta itemprop="description" content="I recently read a lot about smart power meters and how they allow detailed analysis of a households power consumption as well as the habits of its inhabitants. Since our power meter is an old analog Ferraris Meter, I decided to build one myself, which would allow me to analyse our energy consumption without giving the info to my energy provider. This makes it even better than a commercial one!">
+<meta itemprop="datePublished" content="2019-01-22T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-01-22T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1247">
+<meta itemprop="image" content="https://lassemoench.de/smartmeter.jpg">
+
+
+
+<meta itemprop="keywords" content="esp8266," /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lassemoench.de/smartmeter.jpg"/>
+
+<meta name="twitter:title" content="Making a Digital Power Meter - Part 1: Meter"/>
+<meta name="twitter:description" content="I recently read a lot about smart power meters and how they allow detailed analysis of a households power consumption as well as the habits of its inhabitants. Since our power meter is an old analog Ferraris Meter, I decided to build one myself, which would allow me to analyse our energy consumption without giving the info to my energy provider. This makes it even better than a commercial one!"/>
+
+</head>
+<body>
+    
+<nav class="navbar navbar-expand-md navbar-light bg-light fixed-top shadow-sm" id="navbar-main-menu">
+    <div class="container">
+        <a class="navbar-brand font-weight-bold" href="https://lassemoench.de">Lasse&#39;s Wonder Emporium</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="main-menu">
+            <ul class="navbar-nav ml-auto">
+                
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                
+                    <li class="nav-item"><a class="nav-link" href="/about-me/">About Me</a></li>
+                
+            
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+    
+<main class="content-page container pt-7 pb-5">
+    
+    <div class="row">
+        <div class="col">
+            <article>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="meta text-muted mb-3">
+                            <p class="created text-muted text-uppercase font-weight-bold mb-1">January 22, 2019</p>
+                            <span class="mr-2"><i class="fas fa-book-open mr-2"></i>1247 words</span>
+                            <span><i class="fas fa-clock mr-2"></i>6 mins read</span>
+                        </div>
+
+                        <h1>Making a Digital Power Meter - Part 1: Meter</h1>
+
+                        <ul class="authors list-inline"><li class="list-inline-item mr-3">
+                    <div class="media author"><a href="/authors/lasse-moench/" class="mr-3">
+                                    <picture>
+                                        <source srcset="/authors/lasse-moench/jane-smith_hu62bd326fb0c7d5b63111f2a147a15814_14429_64x0_resize_q75_box.jpg 1x, /authors/lasse-moench/jane-smith_hu62bd326fb0c7d5b63111f2a147a15814_14429_128x0_resize_q100_box.jpg 2x, /authors/lasse-moench/jane-smith_hu62bd326fb0c7d5b63111f2a147a15814_14429_192x0_resize_q100_box.jpg 3x">
+                                        <img src="/authors/lasse-moench/jane-smith_hu62bd326fb0c7d5b63111f2a147a15814_14429_64x0_resize_q75_box.jpg" class="rounded-circle" alt="Lasse Moench">
+                                    </picture>
+                                </a><div class="media-body">
+                            <h5 class="name my-0"><a href="/authors/lasse-moench/" class="small">Lasse Moench</a>
+                            </h5></div>
+                    </div>
+                </li></ul>
+                    </div>
+                </div><div class="row justify-content-center mb-3">
+                                <div class="col-lg-10">
+                                    <img data-src="/images/smartmeter_hu6d39fb5e1dacb2204e090be17b31ee1a_102612_900x500_fit_q75_box.jpg" class="img-fluid rounded mx-auto d-block" alt="Making a Digital Power Meter - Part 1: Meter">
+                                </div>
+                            </div><div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="content">
+                            <p>I recently read a lot about smart power meters and how they allow detailed analysis of a households power consumption as well as the habits of its inhabitants. Since our power meter is an old analog <a href="https://www.stromnetz.berlin/en/technology-innovations/how-does-a-meter-work">Ferraris Meter</a>, I decided to build one myself, which would allow me to analyse our energy consumption without giving the info to my energy provider. This makes it even better than a commercial one!</p>
+<p>At first, I wanted to measure the power consumption using a microcontroller and a current clamp sensor. Current clamp sensors use the magnetic field generated by the current flowing through an electrical conductor to measure the current. However, since I am not a certified electrician, there are certain drawbacks associated when tinkering with the electrical installation in your house (the insurance might complain in case of a fire). Then, I stumbled upon <a href="https://www.kompf.de/tech/emeir.html">this german article by Martin Kompf</a> which described how you can read an old ferraris meter like the one in our house, using only an infrared LED and an infrared photoresistor.</p>
+<p>It works like this: The ferraris meter has a small metal wheel with a red stripe on it that spins when power is consumed. Furthermore, it spins exactly 75 times per kWh consumed. This means that we can just count the rotations of this disc, multiply them by 13.3, and get a relatively accurate measurement of how much power we consumed. The drawback of this method is that it is not as exact as other methods, but the resolution will hopefully be good enough to get a good idea how much energy we are using and when. So I hooked up an infrared LED and an infrared photoresistor to an ESP8266 that I had lying around, put it in a box, attached it to the looking glass of the ferraris meter, and started coding. Below is a (badly drawn) schematic of the ESP:</p>
+<p><img src="/images/SmartMeterSchematic.png" alt="Wiring Schematic" title="Smart Meter Schematic"></p>
+<p>Here&rsquo;s the basic idea: The LED emits infrared light, which is reflected onto the photoresistor by the metal disc. When the red stripe reaches the LED, the amount of reflected light changes, changing the resistance of the photoresistor. We measure this change using the analog input of the ESP8266, and register it with a timestamp. We can then calculate how much energy was consumed by multiplying the number of disc-spins with 13.3. It took a little bit of experimenting to determine the correct threshold for detecting the red stripe.</p>
+<p><em>As with most of my posts, please check <a href="https://github.com/LasseMoench/smartmeter">GitHub</a> for the complete code, I might skip parts and pieces that are not interesting to explain in detail!</em></p>
+<p>Let us have a look at the code for the ESP8266. I like to initialize all the variables first. Then we connect to the WiFi network in the setup method:</p>
+<pre><code class="language-c">#include &lt;ESP8266WiFi.h&gt;
+
+#define IRLED 4
+
+int withLed = 0;
+int withoutLed = 0;
+int stripeCount = 0;
+int diff = 0;
+bool disconn = false;
+unsigned long disconnTime = 0;
+unsigned long duration = 0;
+unsigned long lastTick = 0;
+int ticksMissed = 0;
+WiFiClient client;
+
+const int threshold = 150;
+
+// Wi-Fi Settings
+const char* ssid = &quot;WIFI_SSID&quot;; // your wireless network name (SSID)
+const char* password = &quot;SUPERSECRETPASSWORD&quot;; // your Wi-Fi network password
+const char* apiIP = &quot;192.168.0.38&quot;;
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.begin(ssid, password);
+  WiFi.mode(WIFI_STA);
+  Serial.print(&quot;Connecting to WiFi&quot;);
+  pinMode(IRLED, OUTPUT);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(&quot;.&quot;);
+  }
+  Serial.println(&quot;Connected to WiFi!&quot;);
+}
+</code></pre>
+<p>Since we plan on letting this run permanently, we need to consider connection losses. Someone might switch of the router, or the reception might just be bad, etc. I added an API method to report connection losses on reconnect, so that I could see if the connection was bad. My meter is located inside an aluminium box in my basement, so I thought it might be necessary to add a WiFi antenna on the outside of this box. However, the connection is pretty stable so far:</p>
+<pre><code class="language-c">void loop() {
+
+  if (WiFi.status() != WL_CONNECTED &amp;&amp; !disconn) {
+      disconn = true;
+      disconnTime = millis();
+      Serial.println(&quot;Lost WiFi connection!&quot;);
+    };
+
+  if (WiFi.status() == WL_CONNECTED &amp;&amp; disconn) {
+      disconn = false;
+      duration = millis() - disconnTime;
+  
+      //Report the disconnect to the API
+      if (client.connect(apiIP, 80)){
+        // we are connected to the host!
+        client.print(String(&quot;GET /connloss/&quot;)+ disconnTime + &quot;/&quot; + ticksMissed + &quot; HTTP/1.1\r\n&quot; +
+             &quot;Host: &quot; + apiIP + &quot;\r\n&quot; +
+             &quot;Connection: close\r\n&quot; +
+             &quot;\r\n&quot;
+            );
+        Serial.println(&quot;Reporting disconnect!&quot;);
+        while (client.connected()){
+          if (client.available()){
+            String line = client.readStringUntil('\n');
+            Serial.println(line);
+          }
+        }
+        client.stop();
+        Serial.println(&quot;\n[Disconnected]&quot;);
+        ticksMissed = 0;
+      }else{
+        // connection failure
+        Serial.println(&quot;Connection to API failed!&quot;);        
+      }
+      
+    }
+</code></pre>
+<p>Next, we will have a look at the most interesting part: The stripe detection. Since we only want to record one tick per rotation (instead of continously ticking while over a stripe) we only send a tick to the API when we detect that the stripe has ended. There are a few additional things I had to do to ensure proper readings:</p>
+<ol>
+<li>We need to have an extra state while we are detecting the red stripe, so that we don&rsquo;t register multiple turns when the wheel is spinning slowly.</li>
+<li>Since there may be environment light that also changes the photoresistor&rsquo;s resistance, we take alternating measurements: Once with the LED switched on, and once with the LED switched off. By calculating the difference between these two measurements, we only get the light that is emitted by the LED.</li>
+<li>The metal disc in my meter had a little scratch somewhere on the red stripe, which, when the wheel spins really slowly, causes the one red stripe to look like two red stripes. I added a check whether the last red stripe was detected more than a second ago, as anything faster would correspond to a power usage of more than 48kW, which is unrealistic in our household.</li>
+</ol>
+<p>In the end, this is what the stripe detection code looks like:</p>
+<pre><code class="language-c">  //Read without LED first, then switch the LED on and read again. This will filter out IR light that is not generated by the LED.
+  withoutLed = analogRead(A0);
+  
+  digitalWrite(IRLED, LOW);
+
+  delay(10);
+
+  withLed = analogRead(A0);
+
+  digitalWrite(IRLED, HIGH);
+
+  diff = withoutLed - withLed;
+
+//    Serial.print(&quot;Without LED: &quot;);
+//    Serial.println(withoutLed);
+
+//    Serial.print(&quot;With LED: &quot;);
+//    Serial.println(withLed);
+
+//    Serial.print(&quot;Difference is: &quot;);
+//    Serial.println(diff);
+
+  //We are detecting a stripe! (Reality check: last tick was at least 1 sec ago -&gt; less than 50kW usage)
+  if(diff &lt; threshold &amp;&amp; millis() - lastTick &gt; 1000){
+    stripeCount++;
+  }
+
+  //We were detecting a stripe and it has just ended!
+  if(diff &gt; threshold &amp;&amp; stripeCount &gt; 0){
+    stripeCount = 0;
+
+    //Report the stripe to the API
+    if (client.connect(apiIP, 80)){
+      // we are connected to the host!
+      client.print(String(&quot;GET /tick&quot;) + &quot; HTTP/1.1\r\n&quot; +
+           &quot;Host: &quot; + apiIP + &quot;\r\n&quot; +
+           &quot;Connection: close\r\n&quot; +
+           &quot;\r\n&quot;
+          );
+      Serial.println(&quot;Reporting tick!&quot;);
+      while (client.connected()){
+        if (client.available()){
+          String line = client.readStringUntil('\n');
+          Serial.println(line);
+        }
+      }
+      client.stop();
+      Serial.println(&quot;\n[Disconnected]&quot;);
+      lastTick = millis();
+    }else{
+      // connection failure
+      Serial.println(&quot;Connection to tick-API failed!&quot;);    
+      ticksMissed++;    
+    }
+  }
+
+  //The led probably needs some time to switch on and off
+  delay(20);
+}
+</code></pre>
+<p>As you can see, I set up a little API to which the disc-spins (ticks) and connection losses are reported. The API is also available in the git repository, and I am running it on a raspberry pi. I will write a second part in the near future about that API. So far, I have collected about two months of data, and I will soon try to throw some of my very minimal but freshly acquired data science skills at it, which I will hopefully describe in a third part!</p>
+
+                        </div><div class="tags my-3"><a class="badge badge-pill badge-light border mr-2" href="/tags/esp8266">
+                                    <i class="fas fa-tag mr-2"></i>esp8266
+                                </a></div><ul class="share nav my-3 justify-content-end">
+        <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://twitter.com/intent/tweet?url=https%3a%2f%2flassemoench.de%2fpost%2fsmartmeter%2f&text=Making%20a%20Digital%20Power%20Meter%20-%20Part%201%3a%20Meter">
+              <i class="fa-fw fab fa-twitter"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://www.linkedin.com/shareArticle?url=https%3a%2f%2flassemoench.de%2fpost%2fsmartmeter%2f&title=Making%20a%20Digital%20Power%20Meter%20-%20Part%201%3a%20Meter">
+                <i class="fa-fw fab fa-linkedin-in"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://www.facebook.com/sharer.php?u=https%3a%2f%2flassemoench.de%2fpost%2fsmartmeter%2f&t=Making%20a%20Digital%20Power%20Meter%20-%20Part%201%3a%20Meter">
+                <i class="fa-fw fab fa-facebook-f"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://reddit.com/submit?url=https%3a%2f%2flassemoench.de%2fpost%2fsmartmeter%2f&title=Making%20a%20Digital%20Power%20Meter%20-%20Part%201%3a%20Meter">
+                <i class="fa-fw fab fa-reddit-alien"></i>
+            </a>
+        </li>
+    </nav>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        
+                    </div>
+                </div></article>
+        </div>
+    </div>
+
+    
+</main>
+
+
+    <footer class="footer text-center bg-dark py-6">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <ul class="list-inline">
+                    <li class="list-inline-item"><a href="https://lassemoench.de/index.xml" rel="alternate" type="application/rss+xml" class="icons d-block">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a></li><li class="list-inline-item">
+                        <a href="mailto://lasse@lassemoench.de" class="icons d-block">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li><li class="list-inline-item">
+                            <a href="https://github.com/lassemoench" class="icons d-block">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li><li class="list-inline-item">
+                            <a href="https://keybase.io/gasp0de" class="icons d-block">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fab fa-keybase fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                </ul>
+
+                <p class="text-muted">
+                    
+                        Copyright © 2020, Lasse Moench; all rights reserved.
+                    
+                </p>
+
+                <p class="text-muted">
+                Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with <a href="https://github.com/puresyntax71/hugo-theme-chunky-poster" target="_blank">Chunky Poster</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    
+    
+        
+            <script src="/dist/main.d608eadfe5ac0688902e.min.js"></script>
+        
+    
+
+
+
+<script>
+    window.Prism = window.Prism || {};
+    window.Prism.manual = true;
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+
+
+
+    
+</body>
+</html>

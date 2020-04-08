@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<title>
+  
+     Making a Digital Power Meter - Part 2: API | 
+    Lasse&#39;s Wonder Emporium
+  
+</title><meta name="description" content="Student, geek, tinkerer."><meta name="author" content="Lasse Moench">
+
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css">
+    
+
+
+
+    
+        
+            <link rel="stylesheet" href="/dist/main.37ab3f61b95417873748.min.css">
+        
+    
+
+
+
+
+<link rel="canonical" href="https://lassemoench.de/post/smartmeterapi/"><meta property="og:title" content="Making a Digital Power Meter - Part 2: API" />
+<meta property="og:description" content="In Part 1, I explained the general idea for my smart meter and how I assembled the hardware as well as the microcontroller code. In this part, I will explain the little API that I built to record the ticks and to display it using either a website or another microcontroller with a small OLED display.
+I decided to build a RESTful API using the Flask microframework with Connexion. I chose Flask mainly because I have already worked with it at university in the past, but don&rsquo;t worry, it is very easy to get started with it." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lassemoench.de/post/smartmeterapi/" />
+<meta property="og:image" content="https://lassemoench.de/markdown-syntax.jpg" />
+<meta property="article:published_time" content="2019-02-02T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-02-02T00:00:00+00:00" />
+
+<meta itemprop="name" content="Making a Digital Power Meter - Part 2: API">
+<meta itemprop="description" content="In Part 1, I explained the general idea for my smart meter and how I assembled the hardware as well as the microcontroller code. In this part, I will explain the little API that I built to record the ticks and to display it using either a website or another microcontroller with a small OLED display.
+I decided to build a RESTful API using the Flask microframework with Connexion. I chose Flask mainly because I have already worked with it at university in the past, but don&rsquo;t worry, it is very easy to get started with it.">
+<meta itemprop="datePublished" content="2019-02-02T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-02-02T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1118">
+<meta itemprop="image" content="https://lassemoench.de/markdown-syntax.jpg">
+
+
+
+<meta itemprop="keywords" content="esp8266," /><meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lassemoench.de/markdown-syntax.jpg"/>
+
+<meta name="twitter:title" content="Making a Digital Power Meter - Part 2: API"/>
+<meta name="twitter:description" content="In Part 1, I explained the general idea for my smart meter and how I assembled the hardware as well as the microcontroller code. In this part, I will explain the little API that I built to record the ticks and to display it using either a website or another microcontroller with a small OLED display.
+I decided to build a RESTful API using the Flask microframework with Connexion. I chose Flask mainly because I have already worked with it at university in the past, but don&rsquo;t worry, it is very easy to get started with it."/>
+
+</head>
+<body>
+    
+<nav class="navbar navbar-expand-md navbar-light bg-light fixed-top shadow-sm" id="navbar-main-menu">
+    <div class="container">
+        <a class="navbar-brand font-weight-bold" href="https://lassemoench.de">Lasse&#39;s Wonder Emporium</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="main-menu">
+            <ul class="navbar-nav ml-auto">
+                
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                
+                    <li class="nav-item"><a class="nav-link" href="/about-me/">About Me</a></li>
+                
+            
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+    
+<main class="content-page container pt-7 pb-5">
+    
+    <div class="row">
+        <div class="col">
+            <article>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="meta text-muted mb-3">
+                            <p class="created text-muted text-uppercase font-weight-bold mb-1">February 2, 2019</p>
+                            <span class="mr-2"><i class="fas fa-book-open mr-2"></i>1118 words</span>
+                            <span><i class="fas fa-clock mr-2"></i>6 mins read</span>
+                        </div>
+
+                        <h1>Making a Digital Power Meter - Part 2: API</h1>
+
+                        <ul class="authors list-inline"><li class="list-inline-item mr-3">
+                    <div class="media author"><a href="/authors/lasse-moench/" class="mr-3">
+                                    <picture>
+                                        <source srcset="/authors/lasse-moench/jane-smith_hu62bd326fb0c7d5b63111f2a147a15814_14429_64x0_resize_q75_box.jpg 1x, /authors/lasse-moench/jane-smith_hu62bd326fb0c7d5b63111f2a147a15814_14429_128x0_resize_q100_box.jpg 2x, /authors/lasse-moench/jane-smith_hu62bd326fb0c7d5b63111f2a147a15814_14429_192x0_resize_q100_box.jpg 3x">
+                                        <img src="/authors/lasse-moench/jane-smith_hu62bd326fb0c7d5b63111f2a147a15814_14429_64x0_resize_q75_box.jpg" class="rounded-circle" alt="Lasse Moench">
+                                    </picture>
+                                </a><div class="media-body">
+                            <h5 class="name my-0"><a href="/authors/lasse-moench/" class="small">Lasse Moench</a>
+                            </h5></div>
+                    </div>
+                </li></ul>
+                    </div>
+                </div><div class="row justify-content-center mb-3">
+                                <div class="col-lg-10">
+                                    <img data-src="/images/markdown-syntax_hu9d0b46ff016e885d1678cd94c2d23ea6_42965_900x500_fit_q75_box.jpg" class="img-fluid rounded mx-auto d-block" alt="Making a Digital Power Meter - Part 2: API">
+                                </div>
+                            </div><div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="content">
+                            <p>In <a href="https://lassemoench.de/post/smartmeter/">Part 1</a>, I explained the general idea for my smart meter and how I assembled the hardware as well as the microcontroller code. In this part, I will explain the little API that I built to record the ticks and to display it using either a website or another microcontroller with a small OLED display.</p>
+<p>I decided to build a <a href="https://de.wikipedia.org/wiki/Representational_State_Transfer">RESTful API</a> using the <a href="http://flask.pocoo.org/">Flask microframework</a> with <a href="http://flask.pocoo.org/">Connexion</a>. I chose Flask mainly because I have already worked with it at university in the past, but don&rsquo;t worry, it is very easy to get started with it. Have a look at the <a href="https://github.com/zalando/connexion/tree/master/examples/openapi3/helloworld">Connexion helloworld example</a>, you can start from there and adapt it. You can also use any other API framework, and as long as it&rsquo;s Python, you should be able to reuse most of my code if you want to.</p>
+<p>Our API only needs to be able to do three things for us:</p>
+<ol>
+<li>Provide an endpoint to which the ESP8266 can report disc-spins (ticks)</li>
+<li>Save information on the ticks in some kind of permanent data storage (how many ticks happened and when did each tick happen)</li>
+<li>Provide a way to look at the recorded information, ideally in an easy way that even my (less geeky) roommates can use</li>
+</ol>
+<p>Let&rsquo;s start with our first objective. Connexion allows us to define our routes in a yaml file:</p>
+<pre><code class="language-yaml">swagger: '2.0'
+info:
+  title: Very simple energy API
+  version: &quot;0.1&quot;
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /tick:
+    get:
+      summary: Signal one tick (13.3Wh)
+      operationId: api.tick
+      responses:
+        200:
+          description: Successful tick
+</code></pre>
+<p>Let&rsquo;s ignore everything above the &lsquo;paths&rsquo; directive for now and look at the first path (or route) that we defined. The first line defines the URL under which we will find this API method later. Our microcontroller will be able to call this method by sending a request to <code>http://192.168.0.38/tick</code> (Obviously, this address will be different for you, depending on where you decide to run your API). In addition to the yaml file defining the structure of our API, we also create a python file in which we define the methods that should be executed when a certain api endpoint is called. The method that ought to be executed when we call our /tick route is already specified in our yaml file in the <code>operationID</code> attribute. Let&rsquo;s create a python file called api.py with the following content:</p>
+<pre><code class="language-python">import connexion
+from flask import render_template, make_response
+import sqlite3
+import time
+from datetime import datetime, time as dttime
+import json
+
+conn = sqlite3.connect('energy.db')
+c = conn.cursor()
+c.execute('CREATE TABLE IF NOT EXISTS energy(timestamp INTEGER)')
+c.execute('CREATE TABLE IF NOT EXISTS connection_loss(timestamp INTEGER, duration INTEGER, ticks_missed INTEGER)')
+conn.commit()
+
+
+def tick():
+    ts = time.time()
+    print(&quot;13Wh consumed! Timestamp is: {}. Time readable: {}.&quot;.format(ts, datetime.utcfromtimestamp(ts).strftime(
+        '%H:%M:%S %d-%m-%Y')))
+
+    c.execute(&quot;INSERT INTO energy VALUES ({})&quot;.format(ts))
+    conn.commit()
+
+
+app = connexion.App(__name__)
+app.add_api('api.yaml')
+
+# Set the WSGI application callable to allow using uWSGI:
+# uwsgi --http :8080 -w app
+application = app.app
+
+
+def main():
+    # Run our standalone gevent server
+    app.debug = True
+    app.run(port=8080, server='gevent')
+
+
+if __name__ == '__main__':
+    main()
+</code></pre>
+<p>The tick method is very simple: All it does is add a unix timestamp to the <code>energy.db</code> sqlite database file. This simple method is already enough to start recording data on our energy consumption! We can run the api in debug mode by executing <code>python3 api.py</code> in a shell.</p>
+<p>So now that we&rsquo;ve started saving data to the database, it&rsquo;s time to work on a way to view this information. I still had a couple of ESPs lying around, as well as a tiny OLED display that I&rsquo;ve been planning to try out for a while, so I decided to use them and make a little display in our kitchen that shows the most important info. To do that, I created an additional API route:</p>
+<pre><code class="language-yaml">  /lcdinfo:
+    get:
+      summary: Get today's energy consumption to show on an lcd screen
+      operationId: api.get_lcd_info
+      responses:
+        200:
+          description: Successful response
+</code></pre>
+<p>Next, we create the corresponding method in our api.py file:</p>
+<pre><code class="language-python">def get_lcd_info():
+    midnight = datetime.combine(datetime.today(), dttime.min)
+    c.execute(&quot;SELECT Count(*) FROM energy WHERE timestamp &gt; {}&quot;.format(midnight.timestamp()))
+    ticks_today = c.fetchone()
+    daily_power = float('%.2f' % (ticks_today[0] * 13.33333))
+
+    c.execute(&quot;SELECT * FROM energy ORDER BY energy._ROWID_ DESC LIMIT 2&quot;)
+    last_2_timestamps = c.fetchall()
+
+    time_diff_secs = last_2_timestamps[0][0] - last_2_timestamps[1][0]
+
+    # Time it took to consume 13.3Wh extrapolated to hourly energy use
+    current_power = int(13.33333 / time_diff_secs * 3600)
+
+    result = {&quot;daily_power&quot;: daily_power, &quot;current_power&quot;: current_power}
+
+    return result
+</code></pre>
+<p>This simple method will calculate our total energy consumption for the current day as well as our current energy consumption. The result is a dictionary, which will automatically be serialized into JSON by the connexion framework. We can then query this API method with a second ESP and display this information on the OLED display. Since I know the price per kWh, I also calculate the cost on the ESP.</p>
+<p>Finally, I also wanted a way to check the energy consumption when I was not at home or at least not in the kitchen. Therefore, I created a third API endpoint, which, when called, returns an html website with the same data as the OLED display, and a nice plot showing our daily energy consumption. Flask offers the very useful method <code>render_template()</code>, which allows us to write <a href="http://jinja.pocoo.org/">jinja templates</a> and fill them with data using small snippets of python code. We can use that to provide our energy data, which we can then plot on the client side (in the browser) using javascript. This is the code that selects the data from the database and returns the populated html page:</p>
+<pre><code class="language-python">def render_html():
+    c.execute(&quot;SELECT Count(*) FROM energy&quot;)
+    total_power_in_db = c.fetchone()
+    total_power = float('%.2f' % (total_power_in_db[0] * 13.33333 + 25503550))
+
+    midnight = datetime.combine(datetime.today(), dttime.min)
+    c.execute(&quot;SELECT Count(*) FROM energy WHERE timestamp &gt; {}&quot;.format(midnight.timestamp()))
+    ticks_today = c.fetchone()
+    daily_power = float('%.2f' % (ticks_today[0] * 13.33333))
+
+    # TODO: Implement average daily power here for each day
+
+    c.execute(&quot;SELECT * FROM energy ORDER BY energy._ROWID_ DESC LIMIT 2&quot;)
+    last_2_timestamps = c.fetchall()
+
+    time_diff_secs = last_2_timestamps[0][0] - last_2_timestamps[1][0]
+
+    # Time it took to consume 13.3Wh extrapolated to hourly energy use
+    current_power = float('%.2f' % (13.33333 / time_diff_secs * 3600))
+
+    c.execute(&quot;SELECT timestamp FROM energy WHERE timestamp &gt; {}&quot;.format(midnight.timestamp()))
+    rows = c.fetchall()
+
+    data_points = []
+
+    c.execute(&quot;SELECT * FROM energy WHERE timestamp &gt; {}&quot;.format(midnight.timestamp()))
+
+    data_rows = c.fetchall()
+
+    for i in range(1, len(data_rows)):
+        seconds = data_rows[i][0] - data_rows[i-1][0]
+        watt = int(13.33333 / seconds * 3600)
+        timestamp_avg = (data_rows[i][0] + data_rows[i-1][0]) / 2
+        data_points.append([timestamp_avg, watt])
+
+    # print(data_points)
+    
+    headers = {'Content-Type': 'text/html'}
+
+    return make_response(render_template('index.html', current_power=current_power, total_power=total_power,
+                                         daily_power=daily_power, data_points=json.dumps(data_points)), 200,
+                         headers)
+</code></pre>
+<p>You can find <a href="https://github.com/LasseMoench/smartmeter/blob/master/API/templates/index.html">index.html in the GitHub repository</a>. I decided to use <a href="https://developers.google.com/chart/">google charts</a> for plotting the data, however, you could also plot it using python libraries like matplotlib and include the graphs in the website. Congratulations, you can now have a close look on your energy consumption!</p>
+
+                        </div><div class="tags my-3"><a class="badge badge-pill badge-light border mr-2" href="/tags/esp8266">
+                                    <i class="fas fa-tag mr-2"></i>esp8266
+                                </a></div><ul class="share nav my-3 justify-content-end">
+        <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://twitter.com/intent/tweet?url=https%3a%2f%2flassemoench.de%2fpost%2fsmartmeterapi%2f&text=Making%20a%20Digital%20Power%20Meter%20-%20Part%202%3a%20API">
+              <i class="fa-fw fab fa-twitter"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://www.linkedin.com/shareArticle?url=https%3a%2f%2flassemoench.de%2fpost%2fsmartmeterapi%2f&title=Making%20a%20Digital%20Power%20Meter%20-%20Part%202%3a%20API">
+                <i class="fa-fw fab fa-linkedin-in"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://www.facebook.com/sharer.php?u=https%3a%2f%2flassemoench.de%2fpost%2fsmartmeterapi%2f&t=Making%20a%20Digital%20Power%20Meter%20-%20Part%202%3a%20API">
+                <i class="fa-fw fab fa-facebook-f"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://reddit.com/submit?url=https%3a%2f%2flassemoench.de%2fpost%2fsmartmeterapi%2f&title=Making%20a%20Digital%20Power%20Meter%20-%20Part%202%3a%20API">
+                <i class="fa-fw fab fa-reddit-alien"></i>
+            </a>
+        </li>
+    </nav>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        
+                    </div>
+                </div></article>
+        </div>
+    </div>
+
+    <div class="related-content row mt-5 row-cols-1 row-cols-lg-3"><div class="col mb-3">
+                <div class="card h-100">
+    
+    <a href="/post/smartmeter/" class="d-block"><img data-src="/images/smartmeter_hu6d39fb5e1dacb2204e090be17b31ee1a_102612_700x350_resize_q75_box.jpg" class="card-img-top mx-auto d-block" alt="Making a Digital Power Meter - Part 1: Meter"><div class="card-body">
+            <h4 class="card-title">Making a Digital Power Meter - Part 1: Meter</h4>
+            <p class="card-text text-muted text-uppercase">January 22, 2019</p>
+            <div class="card-text">
+                I recently read a lot about smart power meters and how they allow detailed analysis of a households power consumption as well as the habits of its inhabitants. Since our power meter is an old analog Ferraris Meter, I decided to build one myself, which would allow me to analyse our energy consumption without giving the info to my energy provider. This makes it even better than a commercial one!
+            </div>
+        </div>
+    </a>
+</div>
+
+            </div></div>
+</main>
+
+
+    <footer class="footer text-center bg-dark py-6">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <ul class="list-inline">
+                    <li class="list-inline-item"><a href="https://lassemoench.de/index.xml" rel="alternate" type="application/rss+xml" class="icons d-block">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a></li><li class="list-inline-item">
+                        <a href="mailto://lasse@lassemoench.de" class="icons d-block">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li><li class="list-inline-item">
+                            <a href="https://github.com/lassemoench" class="icons d-block">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li><li class="list-inline-item">
+                            <a href="https://keybase.io/gasp0de" class="icons d-block">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fab fa-keybase fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                </ul>
+
+                <p class="text-muted">
+                    
+                        Copyright © 2020, Lasse Moench; all rights reserved.
+                    
+                </p>
+
+                <p class="text-muted">
+                Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with <a href="https://github.com/puresyntax71/hugo-theme-chunky-poster" target="_blank">Chunky Poster</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    
+    
+        
+            <script src="/dist/main.d608eadfe5ac0688902e.min.js"></script>
+        
+    
+
+
+
+<script>
+    window.Prism = window.Prism || {};
+    window.Prism.manual = true;
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+
+
+
+    
+</body>
+</html>
