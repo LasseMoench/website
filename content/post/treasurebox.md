@@ -1,22 +1,13 @@
 +++
-authors = [
-    "Lasse Moench",
-]
-title = "Building a Smart Treasure Box"
-date = "2019-08-11"
+authors = ["Lasse Moench"]
+categories = ["arduino"]
+date = 2019-08-11T00:00:00Z
 description = "Building a reverse geocache treasure box that is locked until taken to the correct location."
-tags = [
-    "esp8266",
-]
-categories = [
-    "arduino",
-]
-images = [
-    "treasure-box-outside.jpg",
-    "treasure_box_schematic.jpg"
-]
-+++
+images = ["treasure-box-outside.jpg", "treasure_box_schematic.jpg"]
+tags = ["esp8266"]
+title = "Building a Smart Treasure Box"
 
++++
 A couple of weeks ago, I wanted to create a fun gift for a friend of mine. While browsing reddit for inspiration, I stumbled upon [Mikal Hart's reverse geocache puzzle](http://arduiniana.org/projects/the-reverse-geo-cache-puzzle/). I ordered all the parts I needed, and waited a couple of days until they had all arrived.
 
 The basic idea is to create a box that is locked from the inside, and only opens when brought to the right location. For this purpose we need a few things:
@@ -42,7 +33,7 @@ And here's how the inside of my lid looked afterwards:
 
 ![Lid inside](/images/lid_inside.jpg "Treasure Box Lid")
 
-After I wired everything up, it was time for coding. First, we import some libraries that we are going to use and initialize several variables. We also define a custom version of delay that will query the GPS module for new data for a fixed amount of time:
+After I wired everything up, it was time for coding. If you want to follow this article, please [clone the git repository](https://github.com/LasseMoench/treasurebox) as this article does not include the complete code. First, we import some libraries that we are going to use and initialize several variables. We also define a custom version of delay that will query the GPS module for new data for a fixed amount of time:
 
 ```c
 #include <ESP8266WiFi.h>
@@ -72,6 +63,7 @@ const double TARGET_LNG = 6.077338;
 // This custom version of delay() ensures that the gps object is being "fed".
 static void smartDelay(unsigned long ms){unsigned long start = millis(); do  {while (ss.available()) gps.encode(ss.read());} while (millis() - start < ms);}
 ```
+
 Since our code will shut the microcontroller down when it's done, our whole code will be in the setup() method (and therefore will only be executed once on boot, not repeatedly). We start by initializing the screen and some of our output pins, as well as switching off WiFi to save power. When doing this, I stumbled upon a problem: Some of the ESPs IO pins shortly go HIGH on boot. This is not a problem for some applications, but it would cause our box to unlock shortly everytime the button is pressed if the pin that is connected to the relay behaves like that. I tried a few pins and it worked with pin 3 after I also added a 1k pulldown resistor. We also initialize the software serial connection that we're going to use to communicate with the GPS module:
 
 ```c
@@ -93,6 +85,7 @@ void setup() {
 
   ss.begin(9600);
 ```
+
 Next, we need a way to count the amount of tries that have already been spent. Since the microcontroller will reboot, a simple variable won't do and we need to write it to the ESPs EEPROM. Thanks to the EEPROM library, this is quite simple. If the specified amount of tries has been exceeded, we will show a failure message. Otherwise, we will try to get a GPS fix:
 
 ```c
@@ -132,7 +125,9 @@ Next, we need a way to count the amount of tries that have already been spent. S
         }
       }
 ```
+
 After waiting a maximum of 120 seconds for a GPS fix, we check if we got one. If not, we show some error message. If we got a fix, we will calculate the distance between the box and the target. If the distance is smaller than a predefined threshold (I used 100m), we open the box by setting the relay output pin to HIGH. If we are further away, we will show the distance and the amount of tries to the screen for some time and switch everything off after a while. Additionally, we will show the direction in which the adventurer has to walk if the amount of tries is more than 15, since if they haven't found by that time their motivation is probably really low:
+
 ```c
     if(distance < 100.0){
         lcd.clear();
@@ -175,7 +170,9 @@ After waiting a maximum of 120 seconds for a GPS fix, we check if we got one. If
         }
     }
 ```
+
 Now we're done. However, there are two problems that remain: If we want to reset the tries, we need to flash a different firmware and write 0 to the EEPROM, and if the battery is empty and the box is locked, we need to disassemble the box. To fix both problems, I added a little usb socket. Applying power to the usb socket provides power to the microcontroller, bypassing the battery and the switch. Therefore, if the microcontroller is still on after we triggered the switch, we know it is being powered through the usb port. We then show some gibberish on the screen so that if anyone else tries to connect something to the usb port, they will unplug it before it opens the box. After a while of waiting and printing error messages, we open the box and reset the counter:
+
 ```c
   //Print emergency gibberish to to make people unplug usb before box opens
   lcd.clear();
@@ -217,5 +214,5 @@ Now we're done. However, there are two problems that remain: If we want to reset
   delay(20000);
 }
 ```
-That's it, were done! Time to take our box on a trial adventure!
 
+That's it, were done! Time to take our box on a trial adventure!
