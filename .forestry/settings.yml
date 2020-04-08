@@ -5,6 +5,12 @@ admin_path:
 webhook_url: 
 sections:
 - type: directory
+  path: static/images
+  label: Static Images
+  create: all
+  match: "**/*"
+  new_doc_ext: ".jpg"
+- type: directory
   path: content
   label: Pages
   create: all
